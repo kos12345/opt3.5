@@ -1,23 +1,23 @@
-### подготовка
-dnf install postgresql17 postgresql17-contrib postgresql17-server
-
-/usr/pgsql-17/bin/initdb -D /var/lib/pgsql/17/data --data-checksums
-
-sudo systemctl start postgresql-17
-
-cd ~ && wget https://storage.googleapis.com/thaibus/thai_small.tar.gz && tar -xf thai_small.tar.gz && psql < thai.sql
-
-cat > ~/workload2.sql << EOL
-
-INSERT INTO book.tickets (fkRide, fio, contact, fkSeat)
-VALUES (
-	ceil(random()*100)
-	, (array(SELECT fam FROM book.fam))[ceil(random()*110)]::text || ' ' ||
-    (array(SELECT nam FROM book.nam))[ceil(random()*110)]::text
-    ,('{"phone":"+7' || (1000000000::bigint + floor(random()*9000000000)::bigint)::text || '"}')::jsonb
-    , ceil(random()*100));
-
-EOL
+### подготовка  
+dnf install postgresql17 postgresql17-contrib postgresql17-server  
+  
+/usr/pgsql-17/bin/initdb -D /var/lib/pgsql/17/data --data-checksums  
+  
+sudo systemctl start postgresql-17  
+  
+cd ~ && wget https://storage.googleapis.com/thaibus/thai_small.tar.gz && tar -xf thai_small.tar.gz && psql < thai.sql  
+  
+cat > ~/workload2.sql << EOL  
+  
+INSERT INTO book.tickets (fkRide, fio, contact, fkSeat)  
+VALUES (  
+	ceil(random()*100)  
+	, (array(SELECT fam FROM book.fam))[ceil(random()*110)]::text || ' ' ||  
+    (array(SELECT nam FROM book.nam))[ceil(random()*110)]::text  
+    ,('{"phone":"+7' || (1000000000::bigint + floor(random()*9000000000)::bigint)::text || '"}')::jsonb  
+    , ceil(random()*100));  
+  
+EOL  
 
 
 ### тест первый с настройками по умолчанию
