@@ -9,7 +9,6 @@ effective_cache_size = 4GB
 max_wal_senders = 8
 max_connections = 1000
 
-
 create user repl with replication login password 'repl';
 create user repl2 with replication login password 'repl2';
 ```
@@ -47,7 +46,11 @@ select application_name, client_addr, sync_state,usename from pg_stat_replicatio
  repl1            |             | sync       | repl
  repl2            |             | async      | repl2
 ```
-
-
+### тест
+```
+/usr/pgsql-17/bin/pgbench -c 10 -j 4 -T 10 -n -f ~/workload2.sql -U postgres thai
+все тесты показали одинаковую скорость работы в режиме синхронная + асинхронная, или синхронная + каскадная асинхронная с синхронной.
+скорость повышается, только если синхронную реплику переводим в асинхронный режим.
+```
 
 
