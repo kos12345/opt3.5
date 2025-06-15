@@ -46,11 +46,12 @@ select application_name, client_addr, sync_state,usename from pg_stat_replicatio
  repl1            |             | sync       | repl
  repl2            |             | async      | repl2
 ```
-### тест
+### тест и вывод
 ```
 /usr/pgsql-17/bin/pgbench -c 10 -j 4 -T 10 -n -f ~/workload2.sql -U postgres thai
-все тесты с настройками synchronous_commit on,remote_write, remote_apply показали одинаковую скорость работы в режиме синхронная + асинхронная
- или синхронная + каскадная асинхронная с синхронной.
+
+все тесты с настройками synchronous_commit on,remote_write, remote_apply показали одинаковую скорость р
+аботы в режиме синхронная + асинхронная или синхронная + каскадная асинхронная с синхронной.
 
 скорость повышается, только если синхронную реплику переводим в асинхронный режим. и synchronous_commit = local  
 ```
