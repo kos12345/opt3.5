@@ -1,3 +1,5 @@
+### ЗАДАНИЕ
+![image](https://github.com/user-attachments/assets/a5f9031f-4bfd-45a6-a531-25cf2973dfe5)
 ### подготовка мастера
 ```
 vi /var/lib/pgsql/17/data/postgresql.conf
