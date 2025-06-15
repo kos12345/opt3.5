@@ -1,3 +1,5 @@
+### ЗАДАНИЕ
+![image](https://github.com/user-attachments/assets/1c94e6e4-0ea5-4984-ad48-ff10ff7fa902)
 ### подготовка сервера
 ```
 dnf install timescaledb-17
