@@ -1,3 +1,6 @@
+### ЗАДАНИЕ
+![image](https://github.com/user-attachments/assets/d2de6a7a-fd54-4bd1-8795-5da73d3e0351)
+
 ### подключение без pgbouncer  
 /usr/pgsql-17/bin/pgbench -c 600 -j 8 -T 10 -n -f ~/workload2.sql -U postgres thai  
 pgbench (17.5)  
