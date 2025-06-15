@@ -1,3 +1,6 @@
+![image](https://github.com/user-attachments/assets/55a6a967-0f0d-4dd0-8997-0b535c97016c)
+
+
 ### подготовка  
 dnf install postgresql17 postgresql17-contrib postgresql17-server  
   
