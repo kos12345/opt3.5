@@ -38,7 +38,7 @@ JOIN book.bus b ON r.fkbus = b.id
 WHERE t.id = :r;
 EOL
 /usr/pgsql-17/bin/pgbench -c 10 -j 4 -T 10 -n -f ~/workload_allparts.sql -U postgres thai
-**tps = 101.925728** (without initial connection time)
+tps = 101.925728 (without initial connection time)
 ```
 ### тест с 10 партициями 
 ```
@@ -55,7 +55,7 @@ JOIN book.bus b ON r.fkbus = b.id
 WHERE t.id = :r and r.startdate BETWEEN ('2000-01-03') and ('2000-01-12');
 EOL
 /usr/pgsql-17/bin/pgbench -c 10 -j 4 -T 10 -n -f ~/workload_10parts.sql -U postgres thai
-**tps = 385.114751** (without initial connection time)
+tps = 385.114751 (without initial connection time)
 ```
 ### тест с 1 партицией
 ```
@@ -72,7 +72,7 @@ JOIN book.bus b ON r.fkbus = b.id
 WHERE t.id = :r and r.startdate BETWEEN ('2000-01-03') and ('2000-01-03');
 EOL
 /usr/pgsql-17/bin/pgbench -c 10 -j 4 -T 10 -n -f ~/workload_1parts.sql -U postgres thai
-**tps = 1556.190613** (without initial connection time)
+tps = 1556.190613 (without initial connection time)
 ```
 
 ### вывод. чем сильнее мы ограничиваем секции, тем выше производительность.
