@@ -28,4 +28,4 @@ pmm-admin add postgresql --username=pmm --password=pmm
 ### пример собираемой статистики запросов
 ![image](https://github.com/user-attachments/assets/d14fa464-ddb5-4491-9435-5d1e7dedd2f4)
 
-### алерты настраиваются в разделе Alerting
+### алерты настраиваются в разделе Alerting. настроить на тестовом стенде пока что не представляется возможным. возникают ошибки шаблона. разбираюсь
