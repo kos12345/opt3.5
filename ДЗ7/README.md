@@ -82,9 +82,9 @@ progress: 115.0 s, 40.7 tps, lat 24.540 ms stddev 8.266, 0 failed
 ### опыт оптимальный автовакуум
 ```
 ALTER TABLE test SET (
-autovacuum_vacuum_threshold = 5,
-autovacuum_analyze_threshold = 5,
-autovacuum_vacuum_insert_threshold = 5
+autovacuum_vacuum_threshold = 50,
+autovacuum_analyze_threshold = 50,
+autovacuum_vacuum_insert_threshold = 50
 );
 progress: 5.0 s, 49.0 tps, lat 20.140 ms stddev 7.010, 0 failed
 progress: 10.0 s, 39.8 tps, lat 25.117 ms stddev 11.163, 0 failed
