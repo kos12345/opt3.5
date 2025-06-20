@@ -24,8 +24,8 @@ min_wal_size  100MB -> 1GB
 checkpoint  1min -> 10 min
 ```
 ### результаты
-| wal_level | minimal | replica | logical |
-| --- | --- |--- |--- |
-| wal size | 12 kB | 85 MB | 85 MB |
+| wal_level | minimal | replica+full_page_writes| logical+full_page_writes|logical + compression |
+| --- | --- |--- |--- |--- |
+| wal size | 12 kB | 85 MB | 85 MB | 85 MB |
 
 
