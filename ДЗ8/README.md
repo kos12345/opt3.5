@@ -2,7 +2,7 @@
 ![image](https://github.com/user-attachments/assets/6b0b096a-8731-4f86-88d7-e2778160016b)
 ### РАБОТА
 
-### сканирование таблицы
+### work_mem = 16MB shared_buffers = 1GB сканирование таблицы
 ```
 Sort  (cost=1701167.95..1701167.97 rows=8 width=23) (actual time=26165.303..26168.956 rows=11 loops=1)
   Output: payment_type, (round(((sum(tips) / sum((tips + fare))) * '100'::double precision))), (count(*))
@@ -51,7 +51,7 @@ Query Identifier: -3920066491726817770
 Planning Time: 0.087 ms
 Execution Time: 26169.009 ms
 ```
-### индекс  (payment_type,tips,fare)
+### work_mem = 16MB shared_buffers = 1GB индекс  (payment_type,tips,fare)
 ```
 Sort  (cost=958386.67..958386.69 rows=8 width=23) (actual time=10015.597..10033.727 rows=11 loops=1)
   Output: payment_type, (round(((sum(tips) / sum((tips + fare))) * '100'::double precision))), (count(*))
@@ -87,7 +87,7 @@ Query Identifier: -3920066491726817770
 Planning Time: 0.142 ms
 Execution Time: 10033.776 ms
 ```
-### индекс  (payment_type) include (tips,fare)
+### work_mem = 16MB shared_buffers = 1GB индекс  (payment_type) include (tips,fare)
 ```
 include
 Sort  (cost=955845.88..955845.90 rows=8 width=23) (actual time=9694.185..9721.140 rows=11 loops=1)
@@ -124,7 +124,7 @@ Query Identifier: -3920066491726817770
 Planning Time: 0.097 ms
 Execution Time: 9721.189 ms
 ```
-### секционирование partition by list (payment_type) и   индекс  (payment_type,tips,fare)
+### work_mem = 16MB shared_buffers = 1GB секционирование partition by list (payment_type) и   индекс  (payment_type) include(tips,fare)
 ```
 Sort  (cost=1012428.17..1012428.19 rows=8 width=23) (actual time=9731.018..9758.349 rows=11 loops=1)
   Output: taxi_trips_part.payment_type, (round(((sum(taxi_trips_part.tips) / sum((taxi_trips_part.tips + taxi_trips_part.fare))) * '100'::double precision))), (count(*))
@@ -224,7 +224,43 @@ Planning:
 Planning Time: 0.499 ms
 Execution Time: 9758.445 ms
 ```
-### TYPE 
+### WORK_MEM =2GB , SHARED_BUFFERS =2 GB индекс  (payment_type) include (tips,fare)
 ```
+Sort  (cost=956629.90..956629.92 rows=8 width=23) (actual time=6991.202..7041.685 rows=11 loops=1)
+  Output: payment_type, (round(((sum(tips) / sum((tips + fare))) * '100'::double precision))), (count(*))
+  Sort Key: (count(*)) DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=142437
+  ->  Finalize GroupAggregate  (cost=1000.59..956629.78 rows=8 width=23) (actual time=6991.173..7041.671 rows=11 loops=1)
+        Output: payment_type, round(((sum(tips) / sum((tips + fare))) * '100'::double precision)), count(*)
+        Group Key: taxi_trips.payment_type
+        Buffers: shared hit=142437
+        ->  Gather Merge  (cost=1000.59..956629.48 rows=16 width=31) (actual time=6991.090..7041.643 rows=21 loops=1)
+              Output: payment_type, (PARTIAL sum(tips)), (PARTIAL sum((tips + fare))), (PARTIAL count(*))
+              Workers Planned: 2
+              Workers Launched: 2
+              Buffers: shared hit=142437
+              ->  Partial GroupAggregate  (cost=0.56..955627.61 rows=8 width=31) (actual time=4156.448..6038.664 rows=7 loops=3)
+                    Output: payment_type, PARTIAL sum(tips), PARTIAL sum((tips + fare)), PARTIAL count(*)
+                    Group Key: taxi_trips.payment_type
+                    Buffers: shared hit=142437
+                    Worker 0:  actual time=4156.328..6979.648 rows=10 loops=1
+                      Buffers: shared hit=58000
+                    Worker 1:  actual time=4146.034..6969.298 rows=9 loops=1
+                      Buffers: shared hit=55129
+                    ->  Parallel Index Only Scan using i_taxi_trips2 on public.taxi_trips  (cost=0.56..816248.19 rows=11150347 width=23) (actual time=0.038..3692.015 rows=8917894 loops=3)
+                          Output: payment_type, tips, fare
+                          Heap Fetches: 0
+                          Buffers: shared hit=142437
+                          Worker 0:  actual time=0.043..4249.338 rows=10679419 loops=1
+                            Buffers: shared hit=58000
+                          Worker 1:  actual time=0.048..4188.606 rows=10134721 loops=1
+                            Buffers: shared hit=55129
+Query Identifier: -3920066491726817770
+Planning Time: 0.118 ms
+Execution Time: 7041.735 ms
 ```
+#### вывод 
+без физической перестройки таблицы, увеличение work_mem, shared_buffers и создание индекса с include полями является оптимальным вариантом
+
 
