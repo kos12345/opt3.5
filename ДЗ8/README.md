@@ -264,3 +264,70 @@ Execution Time: 7041.735 ms
 без физической перестройки таблицы, увеличение work_mem, shared_buffers и создание индекса с include полями является оптимальным вариантом
 
 
+### columnstore
+### подготовка
+```
+wget https://github.com/citusdata/citus/archive/refs/tags/v13.1.0.zip
+unzip v13.1.0.zip
+cd citus-13.1.0/
+dnf install libcurl-devel lz4-devel postgresql17-devel openssl-devel krb5-devel
+export PATH="$PATH:/usr/pgsql-17/bin"
+./configure
+make && make install
+
+shared_preload_libraries = 'citus,pg_stat_statements'
+
+postgres=# \c taxi
+taxi=# create extension citus;
+
+CREATE TABLE taxi_trips_clmn (unique_key text
+,taxi_id text
+,trip_start_timestamp timestamp
+,trip_end_timestamp timestamp
+,trip_seconds bigint
+,trip_miles float
+,pickup_census_tract bigint
+,dropoff_census_tract bigint
+,pickup_community_area bigint
+,dropoff_community_area bigint
+,fare float
+,tips float
+,tolls float
+,extras float
+,trip_total float
+,payment_type text
+,company text
+,pickup_latitude float
+,pickup_longitude float
+,pickup_location text
+,dropoff_latitude float
+,dropoff_longitude float
+,dropoff_location text) USING columnar;
+
+insert into taxi_trips_clmn select * from taxi_trips;
+
+vacuum (analyze) taxi_trips_clmn;
+```
+### результат. стало хуже..., агрегация идёт дольше
+```
+Sort  (cost=356859.09..356859.11 rows=9 width=23) (actual time=28377.016..28377.019 rows=11 loops=1)
+  Output: payment_type, (round(((sum(tips) / sum((tips + fare))) * '100'::double precision))), (count(*))
+  Sort Key: (count(*)) DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=30906
+  ->  HashAggregate  (cost=356858.79..356858.95 rows=9 width=23) (actual time=28376.998..28377.003 rows=11 loops=1)
+        Output: payment_type, round(((sum(tips) / sum((tips + fare))) * '100'::double precision)), count(*)
+        Group Key: taxi_trips_clmn.payment_type
+        Batches: 1  Memory Usage: 24kB
+        Buffers: shared hit=30906
+        ->  Custom Scan (ColumnarScan) on public.taxi_trips_clmn  (cost=0.00..22437.75 rows=26753683 width=23) (actual time=2.396..16945.193 rows=26753683 loops=1)
+              Output: payment_type, tips, fare
+              Columnar Projected Columns: fare, tips, payment_type
+              Buffers: shared hit=30906
+Query Identifier: -2330102659073145780
+Planning:
+  Buffers: shared hit=35
+Planning Time: 0.635 ms
+Execution Time: 28377.077 ms
+```
+
