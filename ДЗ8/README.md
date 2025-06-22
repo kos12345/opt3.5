@@ -87,7 +87,7 @@ Query Identifier: -3920066491726817770
 Planning Time: 0.142 ms
 Execution Time: 10033.776 ms
 ```
-### индекс  (payment_type,tips,fare)
+### индекс  (payment_type) include (tips,fare)
 ```
 include
 Sort  (cost=955845.88..955845.90 rows=8 width=23) (actual time=9694.185..9721.140 rows=11 loops=1)
