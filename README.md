@@ -6,3 +6,4 @@
 5. [ДЗ5](https://github.com/kos12345/opt3.5/blob/main/%D0%94%D0%975/README.md)
 6. [ДЗ6](https://github.com/kos12345/opt3.5/blob/main/%D0%94%D0%976/README.md)
 7. [ДЗ7](https://github.com/kos12345/opt3.5/blob/main/%D0%94%D0%977/README.md)
+8. [ДЗ8](https://github.com/kos12345/opt3.5/blob/main/%D0%94%D0%978/README.md)
